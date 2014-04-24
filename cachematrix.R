@@ -1,15 +1,44 @@
-## Put comments here that give an overall description of what your
-## functions do
+## The purpose of these two function is trying to 
+## use cache to avoid unnecessary repeated computation 
+## and save computation resources
+##################################################################
 
-## Write a short comment describing this function
+## The purpose of this function is to create a special "matrix" object 
+####################################################################
 
 makeCacheMatrix <- function(x = matrix()) {
+  inverse <- NULL
+  set <- function(y) {
+    x <<- y
+    inverse <<- NULL
+  }
+  get <- function() x
+  setinverse <- function(solve) inverse <<- solve
+  getinverse <- function() inverse
+  list(set = set, get = get,
+       setinverse = setinverse,
+       getinverse = getinverse)
+  
 
 }
 
 
-## Write a short comment describing this function
+## This function in another way is to compute the inverse of the special "matrix" 
+## created by the function above. If the inverse has already been calculated
+## (and the matrix has not changed), the function should retrieve the inverse from the cache.
+########################################################################
 
-cacheSolve <- function(x, ...) {
+cacheInverse <- function(x, ...) {
         ## Return a matrix that is the inverse of 'x'
+  inverse <- x$getinverse()
+  if(!is.null(inverse)) {
+    print ("getting cached data")
+    return(inverse)
+  }
+  data <- x$get()
+  inverse <- solve(data, ...)
+  x$setinverse(inverse)
+  print (inverse)
+  
 }
+
